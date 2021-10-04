@@ -1,13 +1,13 @@
 package org.rickhuizing.petclinicguru.model;
 
-
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
-public class Person extends BaseEntity{
+public class BaseEntity implements Serializable {
 
-    private String firstName;
-    private String lastName;
+    private Long id;
 }
