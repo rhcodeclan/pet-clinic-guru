@@ -3,10 +3,7 @@ package org.rickhuizing.petclinicguru.services.map;
 import org.rickhuizing.petclinicguru.model.BaseEntity;
 import org.rickhuizing.petclinicguru.services.CrudService;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public abstract class AbstractMapService<T extends BaseEntity> implements CrudService<T, Long> {
 
@@ -21,6 +18,10 @@ public abstract class AbstractMapService<T extends BaseEntity> implements CrudSe
     }
 
     public T save(T object) {
+        if (object == null) return null;
+        if (object.getId() == null) {
+            object.setId(getNextId());
+        }
         map.put(object.getId(), object);
         return object;
     }
@@ -31,5 +32,10 @@ public abstract class AbstractMapService<T extends BaseEntity> implements CrudSe
 
     public void delete(T object) {
         map.entrySet().removeIf(e -> e.getValue().equals(object));
+    }
+
+    private Long getNextId() {
+        if (map.isEmpty()) return 0L;
+        return Collections.max(map.keySet()) + 1;
     }
 }
