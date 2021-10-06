@@ -1,9 +1,6 @@
 package org.rickhuizing.petclinicguru.bootstrap;
 
-import org.rickhuizing.petclinicguru.model.Owner;
-import org.rickhuizing.petclinicguru.model.Pet;
-import org.rickhuizing.petclinicguru.model.PetType;
-import org.rickhuizing.petclinicguru.model.Vet;
+import org.rickhuizing.petclinicguru.model.*;
 import org.rickhuizing.petclinicguru.services.OwnerService;
 import org.rickhuizing.petclinicguru.services.PetTypeService;
 import org.rickhuizing.petclinicguru.services.VetService;
@@ -28,6 +25,10 @@ public class DataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
 
+        if (petTypeService.findAll().size() == 0) loadData();
+    }
+
+    private void loadData() {
         PetType dog = new PetType();
         dog.setName("Dog");
         petTypeService.save(dog);
@@ -67,14 +68,25 @@ public class DataLoader implements CommandLineRunner {
 
         ownerService.save(owner2);
 
+        VetSpeciality speciality = new VetSpeciality();
+        speciality.setDescription("radiology");
+        VetSpeciality speciality2 = new VetSpeciality();
+        speciality2.setDescription("hart surgery");
+        VetSpeciality speciality3 = new VetSpeciality();
+        speciality3.setDescription("neurology");
+
+
         Vet vet1 = new Vet();
         vet1.setFirstName("Lightnin");
         vet1.setLastName("Hopkins");
+        vet1.getSpecialities().add(speciality);
+        vet1.getSpecialities().add(speciality3);
         vetService.save(vet1);
 
         Vet vet2 = new Vet();
         vet2.setFirstName("Kaladin");
         vet2.setLastName("Stormblessed");
+        vet2.getSpecialities().add(speciality2);
         vetService.save(vet2);
 
         System.out.println("Loaded owners and vets");
