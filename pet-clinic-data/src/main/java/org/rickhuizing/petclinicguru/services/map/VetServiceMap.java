@@ -3,9 +3,11 @@ package org.rickhuizing.petclinicguru.services.map;
 import org.rickhuizing.petclinicguru.model.Vet;
 import org.rickhuizing.petclinicguru.services.SpecialityService;
 import org.rickhuizing.petclinicguru.services.VetService;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 @Service
+@Profile({"default, map"})
 public class VetServiceMap extends AbstractMapService<Vet> implements VetService {
 
     private final SpecialityService specialityService;
