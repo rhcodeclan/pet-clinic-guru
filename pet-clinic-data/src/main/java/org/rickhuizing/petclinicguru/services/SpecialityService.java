@@ -1,6 +1,6 @@
 package org.rickhuizing.petclinicguru.services;
 
-import org.rickhuizing.petclinicguru.model.VetSpeciality;
+import org.rickhuizing.petclinicguru.model.Speciality;
 
-public interface SpecialityService extends CrudService<VetSpeciality, Long> {
+public interface SpecialityService extends CrudService<Speciality, Long> {
 }
