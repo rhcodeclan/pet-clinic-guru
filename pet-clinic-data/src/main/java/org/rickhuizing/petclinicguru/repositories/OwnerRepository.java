@@ -1,12 +1,11 @@
 package org.rickhuizing.petclinicguru.repositories;
 
 import org.rickhuizing.petclinicguru.model.Owner;
-import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
 
-public interface OwnerRepository extends CrudRepository<Owner, Long> {
+public interface OwnerRepository extends PersonRepository<Owner> {
 
     Optional<Owner> findByAddress(String address);
 
