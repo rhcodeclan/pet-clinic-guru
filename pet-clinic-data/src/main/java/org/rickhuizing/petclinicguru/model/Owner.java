@@ -1,12 +1,10 @@
 package org.rickhuizing.petclinicguru.model;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -27,7 +25,28 @@ public class Owner extends Person {
     @Column(name = "telephone")
     private String telephone;
 
-    @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "owner")
+    @Setter(AccessLevel.NONE)
+    @OneToMany(cascade = CascadeType.ALL,
+            mappedBy = "owner",
+            fetch = FetchType.EAGER,
+            orphanRemoval = true)
     private Set<Pet> pets = new HashSet<>();
+
+    public Set<Pet> getPets() {
+        return Collections.unmodifiableSet(pets);
+    }
+
+    public void addPet(Pet pet) {
+        pets.add(pet);
+        pet.setOwner(this);
+    }
+
+    public Pet getPet(Long id) {
+        return pets.stream().filter(pet -> pet.getId().equals(id)).findFirst().orElse(null);
+    }
+
+    public void removePet(Pet pet) {
+        pets.remove(pet);
+        pet.setOwner(null);
+    }
 }

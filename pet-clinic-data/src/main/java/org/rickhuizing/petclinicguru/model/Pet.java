@@ -8,6 +8,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -34,6 +35,15 @@ public class Pet extends BaseEntity {
     @Column(name = "birth_day")
     private LocalDate birthDay;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
+    @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)
     private Set<Visit> visits = new HashSet<>();
+
+    public Set<Visit> getVisits() {
+        return Collections.unmodifiableSet(visits);
+    }
+
+    public void addVisit(Visit visit){
+        visits.add(visit);
+        visit.setPet(this);
+    }
 }
