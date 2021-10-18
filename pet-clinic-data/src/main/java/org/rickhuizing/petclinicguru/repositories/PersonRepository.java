@@ -14,5 +14,5 @@ public interface PersonRepository<T extends Person> extends CrudRepository<T, Lo
 
     Optional<T> findByLastName(String lastName);
 
-    List<T> findByLastNameContaining(String partialLastName);
+    List<T> findByLastNameContainingIgnoreCase(String partialLastName);
 }

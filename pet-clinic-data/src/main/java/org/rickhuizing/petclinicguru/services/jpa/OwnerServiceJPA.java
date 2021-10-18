@@ -26,6 +26,6 @@ public class OwnerServiceJPA extends AbstractJPAService<Owner> implements OwnerS
 
     @Override
     public List<Owner> findByLastNameContaining(String partialLastName) {
-        return ownerRepository.findByLastNameContaining(partialLastName);
+        return ownerRepository.findByLastNameContainingIgnoreCase(partialLastName);
     }
 }

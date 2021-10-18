@@ -10,6 +10,4 @@ public interface OwnerRepository extends PersonRepository<Owner> {
     Optional<Owner> findByAddress(String address);
 
     Optional<Owner> findByCity(String city);
-
-    Optional<Owner> findByTelephone(String telephone);
 }

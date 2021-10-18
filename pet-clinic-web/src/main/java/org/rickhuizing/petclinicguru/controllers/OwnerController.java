@@ -7,6 +7,8 @@ import org.rickhuizing.petclinicguru.model.Owner;
 import org.rickhuizing.petclinicguru.services.OwnerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collections;
@@ -28,6 +30,11 @@ public class OwnerController {
         model.addAttribute("menu", "owners");
     }
 
+    @InitBinder
+    public void setAllowedFields(WebDataBinder dataBinder) {
+        dataBinder.setDisallowedFields("id");
+    }
+
     @RequestMapping("/find")
     public String initFindForm(Model model) {
         model.addAttribute("owner", new Owner());
@@ -35,15 +42,16 @@ public class OwnerController {
     }
 
     @RequestMapping({"", "/"})
-    public String processFindForm(Owner owner, Model model) {
+    public String processFindForm(Owner owner, BindingResult bindingResult, Model model) {
         Set<Owner> modelOwners;
-        if(owner.getLastName() == null){
+        if (owner.getLastName() == null) {
             owner.setLastName("");
             modelOwners = ownerService.findAll();
         } else {
             List<Owner> byLastName = ownerService.findByLastNameContaining(owner.getLastName());
-            if (byLastName.isEmpty()){
-                modelOwners = Collections.emptySet();
+            if (byLastName.isEmpty()) {
+                bindingResult.rejectValue("lastName", "NotFound", "Lastname containing " + owner.getLastName() + " has not been found");
+                return "owners/find";
             } else {
                 modelOwners = Set.copyOf(byLastName);
             }
