@@ -2,7 +2,7 @@ package org.rickhuizing.petclinicguru.controllers;
 
 
 import org.apache.coyote.Response;
-import org.rickhuizing.petclinicguru.configuration.ErrorControllerAdvice.NotFoundException;
+import org.rickhuizing.petclinicguru.exceptions.NotFoundException;
 import org.rickhuizing.petclinicguru.model.Owner;
 import org.rickhuizing.petclinicguru.services.OwnerService;
 import org.springframework.stereotype.Controller;

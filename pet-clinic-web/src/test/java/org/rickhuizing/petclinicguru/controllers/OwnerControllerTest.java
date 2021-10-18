@@ -10,7 +10,6 @@ import org.rickhuizing.petclinicguru.configuration.ErrorControllerAdvice;
 import org.rickhuizing.petclinicguru.model.Owner;
 import org.rickhuizing.petclinicguru.services.OwnerService;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashSet;
