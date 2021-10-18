@@ -17,6 +17,11 @@ public class OwnerController {
         this.ownerService = ownerService;
     }
 
+    @ModelAttribute
+    public void addAttributes(Model model) {
+        model.addAttribute("menu", "owners");
+    }
+
     @RequestMapping({"", "/"})
     public String listOwners(Model model) {
         model.addAttribute("owners", ownerService.findAll());
