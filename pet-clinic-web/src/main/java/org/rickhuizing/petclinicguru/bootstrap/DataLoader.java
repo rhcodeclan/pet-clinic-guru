@@ -53,6 +53,12 @@ public class DataLoader implements CommandLineRunner {
         pet.setName("Mr Pickles");
         pet.setBirthDay(LocalDate.now());
         owner.addPet(pet);
+
+        owner.addPet(Pet.builder()
+                .petType(dog)
+                .name("Good Boy")
+                .birthDay(LocalDate.ofYearDay(1520, 89))
+                .build());
         ownerService.save(owner);
 
         Owner owner2 = new Owner();

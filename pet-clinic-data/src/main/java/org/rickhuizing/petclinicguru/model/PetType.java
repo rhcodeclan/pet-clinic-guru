@@ -18,4 +18,9 @@ public class PetType extends BaseEntity {
 
     @OneToMany(mappedBy = "petType")
     private Set<Pet> pets = new HashSet<>();
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }
