@@ -6,6 +6,8 @@ import org.rickhuizing.petclinicguru.services.PetService;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @Profile({"default, map"})
 public class OwnerServiceMap extends AbstractMapService<Owner> implements OwnerService {
@@ -36,5 +38,12 @@ public class OwnerServiceMap extends AbstractMapService<Owner> implements OwnerS
                 .filter(item -> item.getLastName() != null && item.getLastName().equals(lastName))
                 .findFirst()
                 .orElse(null);
+    }
+
+    @Override
+    public List<Owner> findByLastNameContaining(String partialLastName) {
+        return this.map.values().stream()
+                .filter(item -> item.getLastName() != null && item.getLastName().contains(partialLastName))
+                .toList();
     }
 }

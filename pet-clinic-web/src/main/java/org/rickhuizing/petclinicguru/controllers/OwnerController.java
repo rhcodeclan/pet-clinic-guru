@@ -7,10 +7,11 @@ import org.rickhuizing.petclinicguru.model.Owner;
 import org.rickhuizing.petclinicguru.services.OwnerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @RequestMapping("/owners")
 @Controller
@@ -27,15 +28,28 @@ public class OwnerController {
         model.addAttribute("menu", "owners");
     }
 
-    @RequestMapping({"", "/"})
-    public String listOwners(Model model) {
-        model.addAttribute("owners", ownerService.findAll());
-        return "owners/owners";
+    @RequestMapping("/find")
+    public String initFindForm(Model model) {
+        model.addAttribute("owner", new Owner());
+        return "owners/find";
     }
 
-    @RequestMapping("/find")
-    public String findOwners() {
-        return "owners/find";
+    @RequestMapping({"", "/"})
+    public String processFindForm(Owner owner, Model model) {
+        Set<Owner> modelOwners;
+        if(owner.getLastName() == null){
+            owner.setLastName("");
+            modelOwners = ownerService.findAll();
+        } else {
+            List<Owner> byLastName = ownerService.findByLastNameContaining(owner.getLastName());
+            if (byLastName.isEmpty()){
+                modelOwners = Collections.emptySet();
+            } else {
+                modelOwners = Set.copyOf(byLastName);
+            }
+        }
+        model.addAttribute("owners", modelOwners);
+        return "owners/owners";
     }
 
     @GetMapping("/{ownerId}")

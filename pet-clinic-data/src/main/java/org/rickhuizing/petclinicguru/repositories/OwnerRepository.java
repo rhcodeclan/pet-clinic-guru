@@ -12,5 +12,4 @@ public interface OwnerRepository extends PersonRepository<Owner> {
     Optional<Owner> findByCity(String city);
 
     Optional<Owner> findByTelephone(String telephone);
-
 }

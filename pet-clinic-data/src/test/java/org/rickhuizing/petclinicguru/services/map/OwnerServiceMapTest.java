@@ -28,7 +28,7 @@ class OwnerServiceMapTest {
         Pet pet = Pet.builder().petType(new PetType()).build();
         assertNull(pet.getId());
         Owner owner = Owner.builder().build();
-        owner.getPets().add(pet);
+        owner.addPet(pet);
         // When
         ownerServiceMap.save(owner);
         // Then

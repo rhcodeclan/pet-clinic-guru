@@ -1,5 +1,6 @@
 package org.rickhuizing.petclinicguru.controllers;
 
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,8 +14,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
+import static org.hamcrest.Matchers.nullValue;
+import static org.hamcrest.beans.HasPropertyWithValue.hasProperty;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -56,12 +60,48 @@ class OwnerControllerTest {
     }
 
     @Test
-    void findOwners() throws Exception {
+    void initializeOwnerForm() throws Exception {
         mockMvc.perform(get("/owners/find"))
                 .andExpect(status().isOk())
-                .andExpect(view().name("owners/find"));
+                .andExpect(view().name("owners/find"))
+                .andExpect(model().attribute("owner", hasProperty("id", nullValue())));
     }
 
+    @Test
+    void findOwnerNoSearchTerm() throws Exception {
+        when(ownerService.findAll()).thenReturn(owners);
+        mockMvc.perform(
+                        get("/owners")
+                                .requestAttr("owner", new Owner()))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owners/owners"))
+                .andExpect(model().attribute("owners", owners));
+        verify(ownerService, times(0)).findByLastName(anyString());
+    }
+
+    @Test
+    void findOwnerByLastName() throws Exception {
+        when(ownerService.findByLastNameContaining(anyString())).thenReturn(List.of(owner1));
+        mockMvc.perform(
+                        get("/owners")
+                                .param("lastName", "aLastName"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owners/owners"))
+                .andExpect(model().attribute("owners", Matchers.contains(owner1)));
+        verify(ownerService, times(0)).findAll();
+    }
+
+    @Test
+    void findOwnerByUnknownLastName() throws Exception {
+        when(ownerService.findByLastNameContaining(anyString())).thenReturn(List.of());
+        mockMvc.perform(
+                        get("/owners")
+                                .param("lastName", "unknownLastName"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("owners/owners"))
+                .andExpect(model().attribute("owners", Matchers.emptyIterable()));
+        verify(ownerService, times(0)).findAll();
+    }
 
     @Test
     void getOwnerHappy() throws Exception {
@@ -82,9 +122,10 @@ class OwnerControllerTest {
 
         mockMvc.perform(get("/owners/4"))
                 .andExpect(status().isNotFound())
-                .andExpect(view().name("/notFound"))
+                .andExpect(view().name("error/notFound"))
                 .andExpect(model().attribute("message", "Owner with ID 4 not found"));
 
         verify(ownerService, times(1)).findById(anyLong());
     }
+
 }

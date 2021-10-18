@@ -4,6 +4,7 @@ import org.rickhuizing.petclinicguru.model.Person;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.NoRepositoryBean;
 
+import java.util.List;
 import java.util.Optional;
 
 @NoRepositoryBean
@@ -12,4 +13,6 @@ public interface PersonRepository<T extends Person> extends CrudRepository<T, Lo
     Optional<T> findByFirstName(String firstName);
 
     Optional<T> findByLastName(String lastName);
+
+    List<T> findByLastNameContaining(String partialLastName);
 }

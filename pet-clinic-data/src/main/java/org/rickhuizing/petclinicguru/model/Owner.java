@@ -26,6 +26,7 @@ public class Owner extends Person {
     private String telephone;
 
     @Setter(AccessLevel.NONE)
+    @Builder.Default
     @OneToMany(cascade = CascadeType.ALL,
             mappedBy = "owner",
             fetch = FetchType.EAGER,
