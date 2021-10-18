@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.rickhuizing.petclinicguru.configuration.ErrorControllerAdvice;
 import org.rickhuizing.petclinicguru.model.Owner;
 import org.rickhuizing.petclinicguru.services.OwnerService;
 import org.springframework.test.web.servlet.MockMvc;
@@ -41,7 +42,9 @@ class OwnerControllerTest {
         owners.add(owner1);
         owners.add(Owner.builder().id(2L).build());
 
-        mockMvc = MockMvcBuilders.standaloneSetup(ownerController).build();
+        mockMvc = MockMvcBuilders.standaloneSetup(ownerController)
+                .setControllerAdvice(new ErrorControllerAdvice())
+                .build();
     }
 
     @Test
@@ -78,9 +81,10 @@ class OwnerControllerTest {
         // when unknown id
         when(ownerService.findById(anyLong())).thenReturn(null);
 
-        mockMvc.perform(get("/owners/1"))
+        mockMvc.perform(get("/owners/4"))
                 .andExpect(status().isNotFound())
-                .andExpect(view().name("/notFound"));
+                .andExpect(view().name("/notFound"))
+                .andExpect(model().attribute("message", "Owner with ID 4 not found"));
 
         verify(ownerService, times(1)).findById(anyLong());
     }

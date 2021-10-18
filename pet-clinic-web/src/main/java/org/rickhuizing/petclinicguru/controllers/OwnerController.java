@@ -1,11 +1,16 @@
 package org.rickhuizing.petclinicguru.controllers;
 
 
+import org.apache.coyote.Response;
+import org.rickhuizing.petclinicguru.configuration.ErrorControllerAdvice.NotFoundException;
 import org.rickhuizing.petclinicguru.model.Owner;
 import org.rickhuizing.petclinicguru.services.OwnerService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequestMapping("/owners")
 @Controller
@@ -34,8 +39,11 @@ public class OwnerController {
     }
 
     @GetMapping("/{ownerId}")
-    public String getOwner(@PathVariable int ownerId, Model model) {
+    public String getOwner(@PathVariable int ownerId, Model model, Response response) {
         Owner byId = ownerService.findById((long) ownerId);
+        if (byId == null) {
+            throw new NotFoundException("Owner with ID " + ownerId + " not found");
+        }
         model.addAttribute("owner", byId);
         return "owners/viewOwner";
     }
