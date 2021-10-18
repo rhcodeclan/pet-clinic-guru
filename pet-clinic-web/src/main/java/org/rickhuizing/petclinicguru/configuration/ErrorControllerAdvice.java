@@ -14,6 +14,14 @@ public class ErrorControllerAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String notFoundException(NotFoundException ex, Model model) {
         model.addAttribute("message", ex.getMessage());
-        return "/notFound";
+        return "error/notFound";
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public String internalServerError(Exception ex, Model model) {
+        ex.printStackTrace(); // todo add logging
+        model.addAttribute("message", "Unexpected error occurred");
+        return "error/error";
     }
 }
