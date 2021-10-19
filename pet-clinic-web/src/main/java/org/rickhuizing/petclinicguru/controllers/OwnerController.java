@@ -96,8 +96,8 @@ public class OwnerController {
     }
 
     @PostMapping("{ownerId}/edit")
-    public String processUpdateOwnerForm(@PathVariable int ownerId, Owner owner, BindingResult result) {
-        if(result.hasErrors()){
+    public String processUpdateOwnerForm(@PathVariable int ownerId, @Valid Owner owner, BindingResult result) {
+        if (result.hasErrors()) {
             return "/owners/createUpdateOwnerForm";
         }
         Owner byId = ownerService.findById((long) ownerId);

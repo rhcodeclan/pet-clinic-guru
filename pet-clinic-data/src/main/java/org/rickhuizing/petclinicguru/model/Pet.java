@@ -5,8 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.Collections;
 import java.util.HashSet;
@@ -22,10 +25,12 @@ import java.util.Set;
 public class Pet extends BaseEntity {
 
     @Column(name = "name")
+    @NotEmpty
     private String name;
 
     @ManyToOne
     @JoinColumn(name = "type_id")
+    @NotNull
     private PetType petType;
 
     @ManyToOne
@@ -33,6 +38,8 @@ public class Pet extends BaseEntity {
     private Owner owner;
 
     @Column(name = "birth_day")
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @NotNull
     private LocalDate birthDay;
 
     @OneToMany(mappedBy = "pet", cascade = CascadeType.ALL)

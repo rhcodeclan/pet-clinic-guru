@@ -13,10 +13,7 @@ import org.rickhuizing.petclinicguru.services.OwnerService;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.MultiValueMapAdapter;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -182,5 +179,20 @@ class OwnerControllerTest {
                 .andExpect(model().attributeHasErrors("owner"))
                 .andExpect(model().attributeHasFieldErrors("owner", "address", "city"));
         verifyNoInteractions(ownerService);
+    }
+
+    @Test
+    void initEditOwnerForm() throws Exception {
+
+    }
+
+    @Test
+    void processEditOwnerForm() throws Exception {
+
+    }
+
+    @Test
+    void processInvalidEditOwnerForm() throws Exception {
+
     }
 }
