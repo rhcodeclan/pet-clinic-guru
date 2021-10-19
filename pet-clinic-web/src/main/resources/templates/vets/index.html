@@ -1,25 +1,30 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{fragments/layout :: layout (~{::body})}">
-<head>
-    <meta charset="UTF-8">
-    <title>List of Vets</title>
-</head>
-<body>
-<h1>List of Vets</h1>
 
-<table class="table table-striped">
+<html xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout (~{::body})}">
+
+<body>
+
+<h2>Veterinarians</h2>
+
+<table id="vets" class="table table-striped">
     <thead>
     <tr>
-        <th th:text="'Id'"></th>
-        <th th:text="'First Name'"></th>
-        <th th:text="'Last Name'"></th>
+        <th>Name</th>
+        <th>Specialties</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:each="vet : ${vets}">
-        <td th:text="${vet.id}"></td>
-        <td th:text="${vet.firstName}"></td>
-        <td th:text="${vet.lastName}"></td>
+    <tr th:each="vet : ${listVets}">
+        <td th:text="${vet.firstName + ' ' + vet.lastName}"></td>
+        <td>
+            <div th:each="specialty, it : ${vet.specialities}">
+                <span th:text="${specialty.description + ', '}" th:unless="${it.last}"/>
+                <span th:text="${specialty.description}" th:if="${it.last}"/>
+            </div>
+
+            <span th:if="${vet.specialities.size() == 0}">none</span>
+        </td>
     </tr>
     </tbody>
 </table>
