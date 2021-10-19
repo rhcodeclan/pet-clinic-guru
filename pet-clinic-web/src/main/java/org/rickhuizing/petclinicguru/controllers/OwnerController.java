@@ -11,7 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -68,5 +68,44 @@ public class OwnerController {
         }
         model.addAttribute("owner", byId);
         return "owners/viewOwner";
+    }
+
+    @GetMapping("/new")
+    public String initCreateOwnerForm(Model model) {
+        model.addAttribute("owner", new Owner());
+        return "/owners/createUpdateOwnerForm";
+    }
+
+    @PostMapping("/new")
+    public String processCreateOwnerForm(@Valid Owner owner, BindingResult result) {
+        if (result.hasErrors()) {
+            return "/owners/createUpdateOwnerForm";
+        }
+        owner = ownerService.save(owner);
+        return "redirect:/owners/" + owner.getId();
+    }
+
+    @GetMapping("{ownerId}/edit")
+    public String initUpdateOwnerForm(@PathVariable int ownerId, Model model) {
+        Owner byId = ownerService.findById((long) ownerId);
+        if (byId == null) {
+            throw new NotFoundException("Owner with ID " + ownerId + " not found");
+        }
+        model.addAttribute("owner", byId);
+        return "/owners/createUpdateOwnerForm";
+    }
+
+    @PostMapping("{ownerId}/edit")
+    public String processUpdateOwnerForm(@PathVariable int ownerId, Owner owner, BindingResult result) {
+        if(result.hasErrors()){
+            return "/owners/createUpdateOwnerForm";
+        }
+        Owner byId = ownerService.findById((long) ownerId);
+        if (byId == null) {
+            throw new NotFoundException("Owner with ID " + ownerId + " not found");
+        }
+        owner.setId(byId.getId());
+        ownerService.save(owner);
+        return "redirect:/owners/" + ownerId;
     }
 }
